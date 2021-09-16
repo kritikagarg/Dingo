@@ -1,9 +1,10 @@
-function Dingo() {
+class Dingo {
 
-    var _this = this;
+    constructor(url) {
+        this.url = url;
+    }
 
-    //cloaking
-    this.cloak = () => {
+    cloak() {
         var curr_origin = document.location["origin"];
         document.write(iframe); 
 
@@ -13,8 +14,15 @@ function Dingo() {
         }
     }
 
-    //return random number
-    this.randarg = () => {
+    get_mementodatetime() {
+        var pathname = window.location.pathname;
+		var archivetime = pathname.split("/");
+		var at = archivetime[2]; 
+		var mementodatetime = at[0] + at[1] + at[2] + at[3] + "-" + at[4] + at[5] + "-" + at[6] + at[7] + "T" + at[8] + at[9] + ":" + at[10] + at[11] + ":" + at[12] + at[13] + "Z (" + at + ")";
+        return mementodatetime
+    }
+    
+    randarg(){
         var lastRand, randNum;
         function rand()
             {
@@ -24,48 +32,45 @@ function Dingo() {
                 return lastRand = randNum;
             };
 
-        var argument = rand()/rand();
-        return _this.argument;
+        const argument = rand()/rand();
+        return argument;
     }
 
-//return current datetime in epoch 
-async function get_datetime() {
-    var time_api = "https://worldtimeapi.org/api/timezone/Etc/UTC";
-    var dturl = time_api+ "?=" + randarg();
-    let response = await fetch(dturl);
-    let data = await response.json();
-    current_epoch = data.unixtime;
-    return current_epoch;
-}
+    async  get_datetime() {
+        var time_api = "https://worldtimeapi.org/api/timezone/Etc/UTC";
+        var dturl = time_api+ "?=" + this.randarg();
+        let response = await fetch(dturl);
+        let data = await response.json();
+        let current_epoch = data.unixtime;
+        return current_epoch;
+    }
 
-//set clock
-async function clock() {
-    current_datetime = await get_datetime();
+    async clock() {
+        current_datetime = await get_datetime();
 
-    var interval = setInterval( () => {
-        // current datetime in ISO
-        var s = new Date(current_datetime * 1000).toISOString();
-        //console.log(s)
+        var interval = setInterval( () => {
+            // current datetime in ISO
+            var s = new Date(current_datetime * 1000).toISOString();
+            //console.log(s)
 
-        document.getElementById("clock").innerHTML = s;
-        current_datetime += 1;
+            document.getElementById("clock").innerHTML = s;
+            current_datetime += 1;
 
-    }, 1000)
-};
+        }, 1000)
+    }
 
-var url = "https://www.pilotonline.com/";
+    getURL(){
+        var rand_url = this.url+ "?=" + this.randarg();
+        return fetch(rand_url, {
+            method: 'GET'
+        });
+    };
 
-//To fetch URL
-function getURL(url){
-    var rand_url = url+ "?=" + randarg();
-    return fetch(rand_url, {
-        method: 'GET'
-    });
-};
+    runit() {
+        this.getURL(this.url).then(function() {
+            var iframe = '<iframe id="inframe" height="450" width="900" src="'+rand_url +'"> </iframe>';
+            document.getElementById("inframe").innerHTML = iframe;
+        });
+    }
 
-//To get Iframe of the specified URL
-getURL(url).then(function() {
-    var iframe = '<iframe id="inframe" height="450" width="900" src="'+rand_url +'"> </iframe>';
-    document.getElementById("inframe").innerHTML = iframe;
-});
 }
