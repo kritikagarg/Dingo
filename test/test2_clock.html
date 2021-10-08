@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+	<title>Demo</title>
+    <script type="text/javascript" src="https://kritikagarg.github.io/Dingo/src/Dingo.js"></script>    
+	</head>
+	<body>
+        <h1>Test Dingo Clock</h1>
+        <div id="display_clock"></div>
+        <script type="text/javascript">
+
+            async function getclock() 
+            {
+                const dingo = new Dingo();
+                console.log(dingo.in_archive);
+                console.log(dingo.get_mementodatetime())
+                
+                
+                let current_datetime = Number(await dingo.get_datetime());
+                console.log(current_datetime);
+
+
+                let interval = setInterval( () => 
+                    {
+                        // current datetime in ISO
+                        var clock = new Date(current_datetime * 1000).toISOString();
+                        document.getElementById("display_clock").innerHTML = clock;
+                        current_datetime += 1;
+
+                    }, 1000)
+                
+            }
+
+            getclock();
+
+        </script>
+    </body>
+</html>
