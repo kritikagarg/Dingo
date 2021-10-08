@@ -2,26 +2,44 @@ class Dingo {
 
     constructor(url) {
         this.url = url;
+        this._current_origin = document.location["origin"] || ""   ;
+        this._in_archive = this._current_origin.includes("web.archive.org")
+        //console.log(this._in_archive)
+    }
+
+    get current_origin() {
+        return this._current_origin;
+    }
+    
+    get in_archive() {
+        return this._in_archive
     }
 
     cloak() {
-        var curr_origin = document.location["origin"];
-        document.write(iframe); 
-
-        if (curr_origin.includes("web.archive.org"))
-        {
-            document.write("archived!!")       
+        if(this.in_archive) {
+            document.write("archived!!")
         }
-    }
-
-    get_mementodatetime() {
-        var pathname = window.location.pathname;
-		var archivetime = pathname.split("/");
-		var at = archivetime[2]; 
-		var mementodatetime = at[0] + at[1] + at[2] + at[3] + "-" + at[4] + at[5] + "-" + at[6] + at[7] + "T" + at[8] + at[9] + ":" + at[10] + at[11] + ":" + at[12] + at[13] + "Z (" + at + ")";
-        return mementodatetime
+        else
+            {console.log("To demonstrate cloaking, page should be archived!!") 
+        }     
     }
     
+
+    get_mementodatetime() {
+        if (this._in_archive){
+            var pathname = window.location.pathname;
+            var archivetime = pathname.split("/");
+            var at = archivetime[2]; 
+            var mementodatetime = at[0] + at[1] + at[2] + at[3] + "-" + at[4] + at[5] + "-" + at[6] + at[7] + "T" + at[8] + at[9] + ":" + at[10] + at[11] + ":" + at[12] + at[13] + "Z (" + at + ")";
+            return mementodatetime
+        }
+        else{
+            return "Archive the page to get Memento-Datetime"
+        }
+    }
+    
+    // To get random number
+
     randarg(){
         var lastRand, randNum;
         function rand()
@@ -37,40 +55,33 @@ class Dingo {
     }
 
     async  get_datetime() {
-        var time_api = "https://worldtimeapi.org/api/timezone/Etc/UTC";
-        var dturl = time_api+ "?=" + this.randarg();
-        let response = await fetch(dturl);
+        var time_api = "https://showcase.api.linx.twenty57.net/UnixTime/tounixtimestamp?datetime=now";
+        var time_api = time_api+ "&=" + this.randarg();
+        console.log(time_api)
+        let response = await fetch(time_api, {
+            headers: {
+                "Access-Control-Allow-Origin": "*"
+            }
+        });
+        console.log(response)
         let data = await response.json();
-        let current_epoch = data.unixtime;
+        let current_epoch = data.UnixTimeStamp;
         return current_epoch;
     }
 
-    async clock() {
-        current_datetime = await get_datetime();
-
-        var interval = setInterval( () => {
-            // current datetime in ISO
-            var s = new Date(current_datetime * 1000).toISOString();
-            //console.log(s)
-
-            document.getElementById("clock").innerHTML = s;
-            current_datetime += 1;
-
-        }, 1000)
-    }
-
-    getURL(){
+    async getURL(){
         var rand_url = this.url+ "?=" + this.randarg();
-        return fetch(rand_url, {
+        //return rand_url;
+        return await fetch(rand_url, {
             method: 'GET'
         });
     };
 
-    runit() {
-        this.getURL(this.url).then(function() {
-            var iframe = '<iframe id="inframe" height="450" width="900" src="'+rand_url +'"> </iframe>';
-            document.getElementById("inframe").innerHTML = iframe;
-        });
+    async runit() {
+        var rand_url = this.getURL(this.url);
+        var iframe = '<iframe id="inframe" height="450" width="900" src="'+rand_url +'"> </iframe>';
+        document.getElementById("inframe").innerHTML = iframe;
+        
     }
 
 }
