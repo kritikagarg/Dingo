@@ -1,28 +1,28 @@
-class Dingo {
+export default class Dingo {
 
     constructor(url) {
         this.url = url;
         this._current_origin = document.location["origin"] || ""   ;
-        this._in_archive = this._current_origin.includes("web.archive.org")
-        //console.log(this._in_archive)
-    }
+        this._in_archive = this._current_origin.includes("web.archive.org");
+        
+    };
 
     get current_origin() {
         return this._current_origin;
-    }
+    };
     
     get in_archive() {
-        return this._in_archive
-    }
+        return this._in_archive;
+    };
 
     cloak() {
         if(this.in_archive) {
-            document.write("archived!!")
+            document.write("archived!!");
         }
         else
-            {console.log("To demonstrate cloaking, page should be archived!!") 
+            {console.log("To demonstrate cloaking, page should be archived!!"); 
         }     
-    }
+    };
     
 
     get_mementodatetime() {
@@ -31,12 +31,12 @@ class Dingo {
             var archivetime = pathname.split("/");
             var at = archivetime[2]; 
             var mementodatetime = at[0] + at[1] + at[2] + at[3] + "-" + at[4] + at[5] + "-" + at[6] + at[7] + "T" + at[8] + at[9] + ":" + at[10] + at[11] + ":" + at[12] + at[13] + "Z (" + at + ")";
-            return mementodatetime
+            return mementodatetime;
         }
         else{
-            return "Archive the page to get Memento-Datetime"
+            return "Archive the page to get Memento-Datetime";
         }
-    }
+    };
     
     // To get random number
 
@@ -52,7 +52,7 @@ class Dingo {
 
         const argument = rand()/rand();
         return argument;
-    }
+    };
 
     async  get_datetime() {
         var time_api = "https://showcase.api.linx.twenty57.net/UnixTime/tounixtimestamp?datetime=now";
@@ -67,11 +67,10 @@ class Dingo {
         let data = await response.json();
         let current_epoch = data.UnixTimeStamp;
         return current_epoch;
-    }
+    };
 
     async getURL(){
         var rand_url = this.url+ "?=" + this.randarg();
-        //return rand_url;
         return await fetch(rand_url, {
             method: 'GET'
         });
@@ -82,6 +81,6 @@ class Dingo {
         var iframe = '<iframe id="inframe" height="450" width="900" src="'+rand_url +'"> </iframe>';
         document.getElementById("inframe").innerHTML = iframe;
         
-    }
+    };
 
 }
