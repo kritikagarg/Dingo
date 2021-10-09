@@ -2,16 +2,16 @@
 <html lang="en">
     <head>
 	<title>Demo</title>
-    <script type="text/javascript" src="https://kritikagarg.github.io/Dingo/src/Dingo.js"></script>    
 	</head>
 	<body>
         <h1> Test Dingo </h1>
-        <script type="text/javascript">
+        <script type="module">  
+            import Dingo from "https://kritikagarg.github.io/Dingo/src/Dingo.js";            
             (async function() {
                 const dingo = new Dingo();
                 console.log(dingo.in_archive);
-                console.log(dingo.get_mementodatetime())
-                dingo.cloak()
+                console.log(dingo.get_mementodatetime());
+                dingo.cloak();
 
             })();
 
