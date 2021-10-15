@@ -1,4 +1,4 @@
-export default class Dingo {
+class Dingo {
 
     constructor(url) {
         this.url = url;
