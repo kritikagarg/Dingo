@@ -2,18 +2,19 @@
 <html lang="en">
     <head>
 	<title>Demo</title>
-	</head>
+    <script defer language="JavaScript" type="text/javascript" src="https://kritikagarg.github.io/Dingo/src/Dingo.js"></script> 	
+</head>
 	<body>
-        <h1> Test Dingo </h1>
-        <script type="module">  
-            import Dingo from "https://kritikagarg.github.io/Dingo/src/Dingo.js";            
-            (async function() {
+        <h1> Test 1 </h1>
+        <script>
+            window.onload = (async function() {
+                //class Dingo {};
                 const dingo = new Dingo();
                 console.log(dingo.in_archive);
                 console.log(dingo.get_mementodatetime());
                 dingo.cloak();
 
-            })();
+            });
 
         </script>
     </body>
