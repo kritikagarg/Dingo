@@ -85,5 +85,5 @@ class Dingo {
 
 }
 
-if(document) document.Dingo = Dingo;
-if(window) window.Dingo = Dingo;
+//if(document) document.Dingo = Dingo;
+//if(window) window.Dingo = Dingo;
