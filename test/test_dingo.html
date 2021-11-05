@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+	<title>Test Dingo</title>
+    <script type="text/javascript" src="./dingo_try1.js"></script>    
+	</head>
+	<body>
+        <h1>Test</h1>
+        <div id="display"></div>
+        <script async>
+            (async function() {
+                
+                const dingo = Dingo();
+
+                dingo.setUrl("https://kritikagarg.github.io/demo_test/simple/img1.jpg");
+                //console.log(.getUrl())
+                const img_url = await dingo.getURL();
+                console.log(img_url);
+                document.getElementById("display").innerHTML = '<img width="200" height="250" src="' +img_url.url+'"/>';
+                console.log(dingo._in_archive);
+                dingo.cloak();
+                dingo.get_mementodatetime();
+                dingo.get_datetime();
+
+            })();
+
+        </script>
+    </body>
+</html>
