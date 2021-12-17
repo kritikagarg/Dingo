@@ -4,7 +4,18 @@ function Dingo() {
 
     var current_origin = document.location["origin"] || ""   ;
     console.log(current_origin);
-    var _in_archive = current_origin.includes("web.archive.org");
+    //var _in_archive = current_origin.includes("web.archive.org");
+
+    // const _test_async = async (t) => {
+    //     return new Promise((resolve) => {
+    //         setTimeout(resolve, t)
+    //     })
+    // }
+
+    // const _test = async () => {
+    //     console.log("_test is called")
+    //     _test_async(1500).then(() => console.log("it works"));
+    // }
 
     const setUrl = (i) => {
         url = i;
@@ -17,7 +28,36 @@ function Dingo() {
         });
     };
 
-    const cloak = () => {
+    const check_in_archive = async () => {
+        const memento = "https://web.archive.org/web/19961017235908/http://www2.yahoo.com/";
+        console.log(memento);
+        return fetch(memento, {
+            mode: 'no-cors',
+            // headers: {
+            //   'Access-Control-Allow-Origin':'*'
+            // }
+          }).then((response) => {
+                // console.log(response);
+                // console.log(response.status); // returns 200
+                mdt = response.headers.get('memento-datetime');
+                //console.log(mdt)
+                if(!mdt){
+                    _in_archive = false;
+                    //console.log("Live web");
+                }else {
+                    //console.log(mdt)
+                    _in_archive = true
+                    //console.log("Archive"); 
+
+                }
+                return _in_archive
+        });        
+    }
+
+    //var _in_archive = await check_in_archive();
+
+    const cloak = async () => {
+        var _in_archive = await check_in_archive();
         if(_in_archive) {
             document.write("archived!!")
         }
@@ -26,7 +66,8 @@ function Dingo() {
         }     
     };    
 
-    const get_mementodatetime = () => {
+    const get_mementodatetime = async () => {
+        var _in_archive = await check_in_archive();
         if (_in_archive){
             var pathname = window.location.pathname;
             var archivetime = pathname.split("/");
@@ -53,35 +94,63 @@ function Dingo() {
         return argument;
     }    
 
-//    var api_response;
-    
-    const get_datetime = () => {
-        var time_api = "https://worldtimeapi.org/api/timezone/Etc/UTC";
-        var time_api = time_api+ "?" + randarg();
-        console.log(time_api)
-
-        // let api_response = fetch(time_api, {
-        //     method: 'GET'
-        // });
-        // console.log(api_response)
-        // return api_response;
-        return fetch(time_api, {
-                method: 'GET'
-            })
-            .then(response => response.json())
-			.then(data => {
-                current_epoch = data.unixtime;
-                console.log(current_epoch);
-	        });;
+    var fetch_retry = async (url) => {
+        while(true){
+            let res = await fetch(url);
+            if(res.status == 200){
+                return res
+                break;
+            }
+        } 
     };
-    
-    // get_datetime().then( current_epoch => {
-    //     let data = api_response.json();
-    //     current_epoch = data.unixtime;
-    //     return current_epoch;
-    // });    
 
-    return {getURL, setUrl, cloak, get_mementodatetime, get_datetime, _in_archive};
+    const get_datetime = async () => {
+        let time_api = "https://worldtimeapi.org/api/timezone/Etc/UTC";       
+        let dturl = time_api+ "?=" + randarg();
+        let response = await fetch_retry(dturl);
+        console.log(response.status);
+        let data = await response.json();
+        current_epoch = data.unixtime;
+        console.log(current_epoch);
+        return current_epoch;
+    }
+
+    // const get_datetime = async () => {
+    //     var time_api = "https://worldtimeapi.org/api/timezone/Etc/UTC";
+    //     var time_api = time_api+ "?" + randarg();
+    //     console.log(time_api)
+
+    //     // let api_response = fetch(time_api, {
+    //     //     method: 'GET'
+    //     // });
+    //     // console.log(api_response)
+    //     // return api_response;
+    //     return fetch(time_api, {
+    //             method: 'GET'
+    //         })
+    //         .then(response => response.json())
+	// 		.then(data => {
+    //             current_epoch = data.unixtime;
+    //             console.log(current_epoch);
+    //             return current_epoch;
+	//         });;
+    // };
+    
+    const chaff = async () => {
+        value = await get_datetime();
+        current_datetime = new Date( value * 1000).toISOString();
+        date = current_datetime.split("T")[0].replace(/-/g , '/');
+        console.log(date)
+
+        const iframe1 = "<iframe style=\"display: none;\" src=\"https://www.bostonherald.com/" + date + "/\"></iframe>";
+        const iframe2 = "<iframe style=\"display: none;\" src=\"https://www.chicagotribune.com/" + date + "/\"></iframe>";
+        const iframe3 = "<iframe style=\"display: none;\" src=\"https://nypost.com/2021/11/07/" + date + "/\"></iframe>";
+        
+        return [iframe1, iframe2, iframe3];
+
+    }; 
+
+    return {getURL, setUrl, cloak, get_mementodatetime, get_datetime, check_in_archive, chaff};
 
 
 };
