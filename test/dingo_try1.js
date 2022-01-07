@@ -68,7 +68,7 @@ function Dingo() {
 
     const get_mementodatetime = async () => {
         var _in_archive = await check_in_archive();
-        console.log(window.location.pathname)
+        console.log(window.location.pathname);
         if (_in_archive){
             var pathname = window.location.pathname;
             var archivetime = pathname.split("/");
