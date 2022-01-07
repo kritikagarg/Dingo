@@ -10,7 +10,7 @@
         <p id="adt"> </p>
         <p>The current ISO time is: <span id="dt"></span></p>
         <div id="display"></div>
-
+        <p> We are in Archive: <span id="inarch"></span></p> 
         <!-- for chaff -->
         <p id="inframe1"> </p>
         <p id="inframe2"> </p>
@@ -28,20 +28,19 @@
                 const img_url = await dingo.getURL();
                 console.log(img_url);
                 document.getElementById("display").innerHTML = '<img width="200" height="250" src="' +img_url.url+'"/>';
-                console.log(await dingo.check_in_archive());
+                const in_archive = await dingo.check_in_archive();
+                document.getElementById("inarch").innerHTML = in_archive;
+                //console.log(dingo._in_archive)
                 //for cloaking
                 //dingo.cloak();
                 //for datetime
-                var archivetime_all =  "This page was archived on: " + dingo.get_mementodatetime();
+                var archivetime_all =  "This page was archived on: " + await dingo.get_mementodatetime();
                 document.getElementById("adt").innerHTML = archivetime_all;
                 dingo.get_datetime().then(value => {
                 console.log(value);
    				document.getElementById("dt").innerHTML = new Date( value * 1000).toISOString(); 
                 //for chaff -->
-                const iframes = dingo.chaff();
-                document.getElementById("inframe1").innerHTML = iframes[0];
-                document.getElementById("inframe2").innerHTML = iframes[1];
-                document.getElementById("inframe3").innerHTML = iframes[2];  
+                dingo.chaff(value);
 
                 });
 

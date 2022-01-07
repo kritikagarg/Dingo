@@ -115,29 +115,10 @@ function Dingo() {
         return current_epoch;
     }
 
-    // const get_datetime = async () => {
-    //     var time_api = "https://worldtimeapi.org/api/timezone/Etc/UTC";
-    //     var time_api = time_api+ "?" + randarg();
-    //     console.log(time_api)
-
-    //     // let api_response = fetch(time_api, {
-    //     //     method: 'GET'
-    //     // });
-    //     // console.log(api_response)
-    //     // return api_response;
-    //     return fetch(time_api, {
-    //             method: 'GET'
-    //         })
-    //         .then(response => response.json())
-	// 		.then(data => {
-    //             current_epoch = data.unixtime;
-    //             console.log(current_epoch);
-    //             return current_epoch;
-	//         });;
-    // };
     
-    const chaff = async () => {
-        value = await get_datetime();
+
+    const chaff = async (value) => {
+        //value = await get_datetime();
         current_datetime = new Date( value * 1000).toISOString();
         date = current_datetime.split("T")[0].replace(/-/g , '/');
         console.log(date)
@@ -146,7 +127,10 @@ function Dingo() {
         const iframe2 = "<iframe style=\"display: none;\" src=\"https://www.chicagotribune.com/" + date + "/\"></iframe>";
         const iframe3 = "<iframe style=\"display: none;\" src=\"https://nypost.com/2021/11/07/" + date + "/\"></iframe>";
         
-        return [iframe1, iframe2, iframe3];
+        document.getElementById("inframe1").innerHTML = iframe1;
+        document.getElementById("inframe2").innerHTML = iframe2;
+        document.getElementById("inframe3").innerHTML = iframe3; 
+        //return [iframe1, iframe2, iframe3];
 
     }; 
 
